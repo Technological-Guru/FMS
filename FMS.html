@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMS Setup Guide: Complete Documentation -Draft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        .hero-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="60" cy="30" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="30" cy="70" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-header h1 {
+            font-size: 3.5em;
+            font-weight: 300;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-header .subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .hero-header .meta {
+            margin-top: 30px;
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+        
+        .content {
+            padding: 0;
+        }
+        
+        .section {
+            padding: 60px 40px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section.alt {
+            background: #f8f9fa;
+        }
+        
+        .section h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #3742fa, #2f3542);
+            border-radius: 2px;
+        }
+        
+        .section h3 {
+            font-size: 1.8em;
+            margin: 40px 0 20px 0;
+            color: #34495e;
+        }
+        
+        .section h4 {
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .section p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #34495e;
+        }
+        
+        .architecture-diagram {
+            width: 100%;
+            height: 800px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            margin: 40px 0;
+            border: 3px solid #ecf0f1;
+        }
+        
+        /* Field Layout */
+        .field {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 300px;
+            background: linear-gradient(90deg, #ff4757 0%, #ff4757 50%, #3742fa 50%, #3742fa 100%);
+            border: 3px solid #2c2c2c;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .field::before {
+            content: "FRC PLAYING FIELD";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        
+        /* Alliance Stations */
+        .alliance-station {
+            position: absolute;
+            width: 160px;
+            height: 80px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .red-alliance {
+            background: linear-gradient(135deg, #ff4757, #c44569);
+            top: 380px;
+            right: 50px;
+        }
+        
+        .blue-alliance {
+            background: linear-gradient(135deg, #3742fa, #2f3542);
+            top: 380px;
+            left: 50px;
+        }
+        
+        /* Driver Stations */
+        .driver-station {
+            position: absolute;
+            width: 40px;
+            height: 25px;
+            background: #2c2c2c;
+            border: 2px solid #666;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .driver-station:hover {
+            transform: scale(1.2);
+            background: #e74c3c;
+            z-index: 10;
+        }
+        
+        .ds1 { top: 480px; right: 170px; }
+        .ds2 { top: 480px; right: 120px; }
+        .ds3 { top: 480px; right: 70px; }
+        .ds4 { top: 480px; left: 70px; }
+        .ds5 { top: 480px; left: 120px; }
+        .ds6 { top: 480px; left: 170px; }
+        
+        /* Switches */
+        .switch {
+            position: absolute;
+            width: 80px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .switch:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .red-switch {
+            top: 530px;
+            right: 90px;
+        }
+        
+        .blue-switch {
+            top: 530px;
+            left: 90px;
+        }
+        
+        /* Router */
+        .router {
+            position: absolute;
+            top: 620px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 60px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .router:hover {
+            transform: translateX(-50%) scale(1.1);
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        /* FMS Computer */
+        .fms-computer {
+            position: absolute;
+            top: 720px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 70px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .fms-computer:hover {
+            transform: translateX(-50%) scale(1.1);
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .fms-ip {
+            font-size: 10px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+        
+        /* Connections */
+        .connection {
+            position: absolute;
+            background: #34495e;
+            border-radius: 2px;
+        }
+        
+        /* Vertical connections from driver stations to switches */
+        .conn-ds-sw {
+            width: 3px;
+            height: 30px;
+        }
+        
+        .conn1 { top: 505px; right: 187px; }
+        .conn2 { top: 505px; right: 137px; }
+        .conn3 { top: 505px; right: 87px; }
+        .conn4 { top: 505px; left: 87px; }
+        .conn5 { top: 505px; left: 137px; }
+        .conn6 { top: 505px; left: 187px; }
+        
+        /* Horizontal connections from switches to router */
+        .conn-sw-router {
+            width: 3px;
+            height: 60px;
+            top: 580px;
+        }
+        
+        .conn-red { right: 129px; }
+        .conn-blue { left: 129px; }
+        
+        /* Vertical connection from router to FMS */
+        .conn-router-fms {
+            width: 3px;
+            height: 40px;
+            top: 680px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Displays */
+        .display {
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .display:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .audience-display {
+            top: 50px;
+            right: 50px;
+        }
+        
+        .score-display {
+            top: 50px;
+            left: 50px;
+        }
+        
+        /* Display connections */
+        .display-conn {
+            position: absolute;
+            width: 2px;
+            background: #8e44ad;
+        }
+        
+        .aud-conn {
+            height: 580px;
+            top: 110px;
+            right: 99px;
+        }
+        
+        .score-conn {
+            height: 580px;
+            top: 110px;
+            left: 99px;
+        }
+        
+        /* Labels and annotations */
+        .label {
+            position: absolute;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .ip-label {
+            top: 600px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: -20px;
+        }
+        
+        /* Network segments */
+        .network-segment {
+            position: absolute;
+            border: 2px dashed #95a5a6;
+            border-radius: 10px;
+            background: rgba(149, 165, 166, 0.1);
+        }
+        
+        .red-network {
+            top: 360px;
+            right: 30px;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .blue-network {
+            top: 360px;
+            left: 30px;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .core-network {
+            top: 600px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 200px;
+            margin-left: -150px;
+        }
+        
+        /* Network labels */
+        .network-label {
+            position: absolute;
+            font-size: 12px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+        
+        .red-net-label {
+            top: 570px;
+            right: 40px;
+        }
+        
+        .blue-net-label {
+            top: 570px;
+            left: 40px;
+        }
+        
+        .core-net-label {
+            top: 610px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: 120px;
+        }
+        
+        /* Content Styling */
+        .highlight-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .highlight-box h3 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 5px solid #ffffff;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #55efc4, #00b894);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 5px solid #ffffff;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+        
+        .grid-item {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 5px solid #3742fa;
+        }
+        
+        .grid-item h4 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-left: 5px solid #4299e1;
+        }
+        
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            background: #f8f9fa;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #3742fa;
+            position: relative;
+            padding-left: 60px;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3742fa;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #3742fa, #2f3542);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3742fa, #2f3542);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 10px 10px 0;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #00b894, #00a085);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #3742fa;
+        }
+        
+        .toc h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .toc li {
+            margin: 10px 0;
+        }
+        
+        .toc a {
+            color: #3742fa;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .toc a:hover {
+            color: #2f3542;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .footer p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-header {
+                padding: 40px 20px;
+            }
+            
+            .hero-header h1 {
+                font-size: 2.5em;
+            }
+            
+            .section {
+                padding: 40px 20px;
+            }
+            
+            .grid-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .architecture-diagram {
+                height: 600px;
+            }
+            
+            .field {
+                width: 400px;
+                height: 200px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-container">
+        <!-- Hero Header -->
+        <header class="hero-header">
+            <div class="hero-content">
+                <h1>Mastering FMS: From Zero to Hero</h1>
+                <p class="subtitle">The Ultimate Field Management System Guide for FIRST Robotics Competition</p>
+                <div class="meta">
+                    "Compiled by Guru(Pranavagurubaran S),
+                        Reviewed by Andy Gasser (#7028) & Corey Applegate (#4607)
+                        Based on public FRC, Cheesy Arena, and Freezy Arena resources."<br>
+                    <em><strong>Empowering Minnesota robotics teams with professional-grade FMS knowledge</strong></em>
+                </div>
+                <div style="margin-top: 25px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                    <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">Week 0 Ready</span>
+                    <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">Byron MN Event</span>
+                    <span style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">Student-Friendly</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Table of Contents -->
+        <div class="section">
+            <div class="toc">
+                <h3>📋 Table of Contents</h3>
+                <ul>
+                    <li><a href="#introduction">Introduction to FMS</a></li>
+                    <li><a href="#architecture">System Architecture</a></li>
+                    <li><a href="#software-options">Software Options</a></li>
+                    <li><a href="#hardware-requirements">Hardware Requirements</a></li>
+                    <li><a href="#setup-guide">Step-by-Step Setup</a></li>
+                    <li><a href="#configuration">Network Configuration</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#resources">Resources & Support</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Introduction -->
+        <section id="introduction" class="section">
+            <h2>🚀 Why This Guide Matters for Minnesota Robotics</h2>
+            
+            <div class="warning-box">
+                <h4>From the Author - Guru</h4>
+                <p>"As a First Robo  member&mentor in Minnesota, I've seen challenges with FMS setup during offseason and crucial Week 0 events. This guide bridges the gap between theory and practice, giving you the confidence to deploy professional-grade field management systems to prepa for SEASON."</p>
+            </div>
+            
+            <p>The Field Management System (FMS) is the technological backbone of every FIRST Robotics Competition event. For teams across Minnesota - Especially SE MN We at                                                                                                                                                                          
+            Byron - mastering FMS setup is your gateway to hosting successful scrimmages, Week 0 events, and off-season competitions that truly prepare teams for regional success.</p>
+            
+            <div class="highlight-box">
+                <h3>🎯 Your Journey to FMS Mastery</h3>
+                <p>This isn't just another technical manual. It's your complete roadmap from FMS novice to confident event organizer, designed specifically for the unique needs of Minnesota robotics teams and mentors.</p>
+            </div>
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h4>🔧 Technical Skills You'll Master</h4>
+                    <ul>
+                        <li>Professional network architecture design</li>
+                        <li>Pro-grade hardware configuration</li>
+                        <li>Software deployment and optimization</li>
+                        <li>Advanced troubleshooting methodologies</li>
+                        <li>Minnesota-specific venue considerations</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>🏆 Why Minnesota Teams Win</h4>
+                    <ul>
+                        <li>Real-world IT experience for students</li>
+                        <li>Leadership development through tech challenges</li>
+                        <li>Collaborative problem-solving culture</li>
+                        <li>Preparation for STEM careers</li>
+                        <li>Building resilient team networks</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Diagram -->
+        <section id="architecture" class="section alt">
+            <h2>🏗️ FMS Architecture: The Brain Behind the Competition</h2>
+            
+            <p>Every successful FRC event starts with solid architecture. As someone witness many off-seasons across.. I can tell you that understanding this architecture isn't optional, it's essential.</p>
+
+            <div class="warning-box">
+                <h4>⚡ Pro Tip from the Trenches</h4>
+                <p>"I've seen teams lose entire practice sessions because they didn't understand the critical 10.0.100.5 IP requirement. Don't let poor planning sabotage your team's preparation!" - Pranavagurubaran</p>
+            </div>
+
+            <div class="architecture-diagram">
+                <!-- Network Segments -->
+                <div class="network-segment red-network"></div>
+                <div class="network-segment blue-network"></div>
+                <div class="network-segment core-network"></div>
+                
+                <!-- Network Labels -->
+                <div class="network-label red-net-label">Red Alliance<br>Network</div>
+                <div class="network-label blue-net-label">Blue Alliance<br>Network</div>
+                <div class="network-label core-net-label">Core<br>Network</div>
+                
+                <!-- Field -->
+                <div class="field"></div>
+                
+                <!-- Alliance Stations -->
+                <div class="alliance-station red-alliance">
+                    <div>RED ALLIANCE</div>
+                    <div style="font-size: 12px;">Stations 1-3</div>
+                </div>
+                <div class="alliance-station blue-alliance">
+                    <div>BLUE ALLIANCE</div>
+                    <div style="font-size: 12px;">Stations 1-3</div>
+                </div>
+                
+                <!-- Driver Stations -->
+                <div class="driver-station ds1">DS1</div>
+                <div class="driver-station ds2">DS2</div>
+                <div class="driver-station ds3">DS3</div>
+                <div class="driver-station ds4">DS1</div>
+                <div class="driver-station ds5">DS2</div>
+                <div class="driver-station ds6">DS3</div>
+                
+                <!-- Switches -->
+                <div class="switch red-switch">
+                    <div>RED<br>SWITCH</div>
+                </div>
+                <div class="switch blue-switch">
+                    <div>BLUE<br>SWITCH</div>
+                </div>
+                
+                <!-- Router -->
+                <div class="router">
+                    <div>FIELD<br>ROUTER</div>
+                </div>
+                
+                <!-- FMS Computer -->
+                <div class="fms-computer">
+                    <div>FMS SERVER</div>
+                    <div class="fms-ip">10.0.100.5</div>
+                </div>
+                
+                <!-- Displays -->
+                <div class="display audience-display">
+                    AUDIENCE<br>DISPLAY
+                </div>
+                <div class="display score-display">
+                    SCORING<br>DISPLAY
+                </div>
+                
+                <!-- Connections -->
+                <div class="connection conn-ds-sw conn1"></div>
+                <div class="connection conn-ds-sw conn2"></div>
+                <div class="connection conn-ds-sw conn3"></div>
+                <div class="connection conn-ds-sw conn4"></div>
+                <div class="connection conn-ds-sw conn5"></div>
+                <div class="connection conn-ds-sw conn6"></div>
+                
+                <div class="connection conn-sw-router conn-red"></div>
+                <div class="connection conn-sw-router conn-blue"></div>
+                <div class="connection conn-router-fms"></div>
+                
+                <div class="display-conn aud-conn"></div>
+                <div class="display-conn score-conn"></div>
+                
+                <!-- Labels -->
+                <div class="label ip-label">10.0.100.1</div>
+            </div>
+
+            <div class="info-box">
+                <h4>🎮 Interactive Learning Experience</h4>
+                <p>Hover over any component in the diagram above to see it come alive! This isn't just documentation - it's hands-on learning designed to help Minnesota students and mentors visualize the complete FMS ecosystem.</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🧠 Understanding the Minnesota FMS Advantage</h3>
+                <p>Minnesota teams consistently perform well at regionals because we understand that many off-season events with solid FMS fundamentals create competitive advantages. This architecture isn't just about running matches - it's about building the technical confidence that translates to success on the competition field.</p>
+            </div>
+
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h4>🔧 Mission-Critical Hardware</h4>
+                    <ul>
+                        <li><strong>FMS Server:</strong> Your command center at 10.0.100.5</li>
+                        <li><strong>Field Router:</strong> The communication hub</li>
+                        <li><strong>Alliance Switches:</strong> Team network guardians</li>
+                        <li><strong>Driver Stations:</strong> Where the magic happens</li>
+                        <li><strong>Displays:</strong> Keeping everyone informed</li>
+                    </ul>
+                </div>
+                
+                <div class="grid-item">
+                    <h4>🌐 Network Architecture Mastery</h4>
+                    <ul>
+                        <li><strong>Core Network:</strong> 10.0.100.x - your digital backbone</li>
+                        <li><strong>Alliance Isolation:</strong> VLAN security protocols</li>
+                        <li><strong>DHCP Range:</strong> .20-.199 auto-configuration</li>
+                        <li><strong>WiFi SSIDs:</strong> Secure robot communication</li>
+                        <li><strong>Failsafe Systems:</strong> Minnesota-weather-tested redundancy</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Software Options -->
+        <section id="software-options" class="section">
+            <h2>💻 The FMS Software Showdown: Choose Your Weapon</h2>
+            
+            <p>After deploying FMS systems across Minnesota for three years, I've learned that choosing the right software can make or break your event. Here's my honest assessment of the three main contenders, tested in real Minnesota conditions.</p>
+
+            <div class="warning-box">
+                <h4>🎯 Gurs's Couple of cents</h4>
+                <p>"For Byron MN and any serious Week 0 event, FMS Freezy Arena is your best bet. I've used it in sub-zero Minnesota winters and scorching summer heat - it just works. The A-stop functionality alone has saved multiple events from potential disasters."</p>
+            </div>
+
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h4>🏆 FMS Freezy Arena (Champion Choice)</h4>
+                    <p><strong>Perfect for Byron MN Week 0 Events</strong></p>
+                    <ul>
+                        <li>✅ A-stop emergency functionality</li>
+                        <li>✅ 2025 REEFSCAPE theming</li>
+                        <li>✅ Minnesota-tested reliability</li>
+                        <li>✅ Enhanced Week 0 features</li>
+                        <li>✅ cpapplefamily's proven track record</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>🥈 Official FMS Off-Season (The Safe Choice)</h4>
+                    <p><strong>When you need FIRST approval</strong></p>
+                    <ul>
+                        <li>✅ Official FIRST blessing</li>
+                        <li>✅ Full support network</li>
+                        <li>❌ No A-stop functionality</li>
+                        <li>❌ Generic theming only</li>
+                        <li>❌ Requires approval process</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h4>🥉 Standard Cheesy Arena (The Reliable Backup)</h4>
+                    <p><strong>When you need proven stability</strong></p>
+                    <ul>
+                        <li>✅ Team 254's legendary quality</li>
+                        <li>✅ Massive community support</li>
+                        <li>✅ Open source transparency</li>
+                        <li>❌ No Week 0 specific features</li>
+                        <li>❌ Missing advanced safety systems</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>🎖️ The Minnesota Verdict</h4>
+                    <p><strong>Real-world performance matters</strong></p>
+                    <ul>
+                        <li>🏆 Freezy Arena: Week 0 events</li>
+                        <li>🥈 Official FMS: Sanctioned events</li>
+                        <li>🥉 Cheesy Arena: Practice/scrimmages</li>
+                        <li>🔧 Hybrid approach: Use all three!</li>
+                        <li>📚 Learn from each system's strengths</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hardware Requirements -->
+        <section id="hardware-requirements" class="section alt">
+            <h2>🛠️ Hardware: Building Your Minnesota-Tough FMS</h2>
+            
+            <p>Minnesota weather teaches us one thing: equipment must be bulletproof. Here's the hardware setup that's survived everything from -20°F gymnasium setups to 95°F outdoor events.</p>
+
+            <div class="highlight-box">
+                <h3>💪 The "Minnesota Standard" Hardware List</h3>
+                <p>This isn't just a shopping list - it's three years of field-tested experience distilled into the components that actually work when your event depends on them.</p>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Specification</th>
+                            <th>Minnesota Price Range</th>
+                            <th>Pranavagurubaran's Pick</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>FMS Computer</strong></td>
+                            <td>8GB RAM, SSD, Gigabit Ethernet</td>
+                            <td>$800 - $1,500</td>
+                            <td>Lenovo ThinkPad (tank-like reliability)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Field Router</strong></td>
+                            <td>WiFi 6, Gigabit ports, VLAN support</td>
+                            <td>$100 - $300</td>
+                            <td>ASUS AX6000 (cold-weather tested)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Alliance Switches</strong></td>
+                            <td>Managed, 8+ ports, PoE preferred</td>
+                            <td>$150 - $400 each</td>
+                            <td>Netgear GS308P (proven in MN events)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cabling</strong></td>
+                            <td>CAT6, various lengths, cold-rated</td>
+                            <td>$200 - $500 total</td>
+                            <td>Monoprice outdoor-rated cables</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="warning-box">
+                <h4>❄️ Minnesota-Specific Considerations</h4>
+                <p><strong>Cold Weather Impact:</strong> Standard consumer electronics fail below 32°F. Always test your setup in actual venue conditions, and have backup equipment ready. I learned this the hard way during a February scrimmage in Duluth!</p>
+            </div>
+        </section>
+
+        <!-- Setup Guide -->
+        <section id="setup-guide" class="section">
+            <h2>🎯 Step-by-Step Setup: The Byron MN Blueprint</h2>
+            
+            <p>This is the exact process I used to set up the Byron MN Week 0 event. Follow these steps, and you'll have a professional-grade FMS running in under 2 hours.</p>
+
+            <div class="info-box">
+                <h4>⏱️ Timeline: From Zero to Hero in 120 Minutes</h4>
+                <p>Based on real deployments across Minnesota, this setup timeline assumes you have all hardware ready and one experienced mentor plus two students working together.</p>
+            </div>
+
+            <ol class="step-list">
+                <li>
+                    <strong>Download FMS Freezy Arena</strong><br>
+                    Visit GitHub and search for "cpapplefamily cheesy-arena". Download the 2025-Reefscape-Week-0 release for your operating system. Extract to a dedicated folder on your FMS computer.
+                </li>
+                <li>
+                    <strong>Configure Network Hardware</strong><br>
+                    Set your router to 10.0.100.1 with DHCP range 10.0.100.20-199. This is non-negotiable - Driver Station software is hardcoded to look for FMS at 10.0.100.5.
+                </li>
+                <li>
+                    <strong>Position Alliance Switches</strong><br>
+                    Place one switch under the middle driver station of each alliance. Run 50-75ft CAT6 cables from each switch back to your scoring table router.
+                </li>
+                <li>
+                    <strong>Set FMS Computer IP</strong><br>
+                    Configure static IP: 10.0.100.5, subnet 255.255.255.0, gateway 10.0.100.1. This is the most critical step - get this wrong and nothing works.
+                </li>
+                <li>
+                    <strong>Connect Driver Stations</strong><br>
+                    Connect each team's driver station to their appropriate alliance switch using 15-20ft CAT6 cables. Set driver stations to DHCP (automatic).
+                </li>
+                <li>
+                    <strong>Launch and Configure FMS</strong><br>
+                    Start FMS Freezy Arena, access web interface at 10.0.100.5:8080. Create your event, add teams, configure match schedule, and test emergency systems.
+                </li>
+            </ol>
+
+            <div class="highlight-box">
+                <h3>🔥 The "Byron Standard" Validation Checklist</h3>
+                <p>Before any team arrives, run through this checklist. It's saved me from embarrassment more times than I can count.</p>
+                <ul>
+                    <li>✅ FMS responds at 10.0.100.5:8080</li>
+                    <li>✅ All 6 driver stations connect and show green</li>
+                    <li>✅ Test robot can connect to WiFi SSID</li>
+                    <li>✅ Emergency stop functions work</li>
+                    <li>✅ Scoring displays update in real-time</li>
+                    <li>✅ Match timing cycles properly</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Configuration -->
+        <section id="configuration" class="section alt">
+            <h2>⚙️ Network Configuration: The Devil in the Details</h2>
+            
+            <p>Network configuration is where most FMS deployments fail. Here are the exact settings that work, tested across Minnesota venues from Rochester to Duluth.</p>
+
+            <div class="code-block">
+<strong>Router Configuration (Critical Settings)</strong>
+LAN IP Address: 10.0.100.1
+Subnet Mask: 255.255.255.0
+DHCP Start: 10.0.100.20
+DHCP End: 10.0.100.199
+DHCP Lease Time: 2 hours
+WiFi SSID Format: [TeamNumber]_Robot
+WiFi Security: WPA2-PSK
+
+<strong>FMS Computer Network Settings</strong>
+IP Address: 10.0.100.5 (STATIC - NEVER DHCP)
+Subnet Mask: 255.255.255.0
+Default Gateway: 10.0.100.1
+Primary DNS: 8.8.8.8
+Secondary DNS: 8.8.4.4
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Common Minnesota Venue Gotchas</h4>
+                <p><strong>School Networks:</strong> Many Minnesota schools block the 10.0.100.x range. Coordinate with IT staff 48 hours before your event. <strong>Winter Venues:</strong> Heated gymnasiums can cause electronic interference - test wireless range thoroughly.</p>
+            </div>
+
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h4>🔒 Security Best Practices</h4>
+                    <ul>
+                        <li>Change default router passwords</li>
+                        <li>Disable WPS on all WiFi networks</li>
+                        <li>Use strong WPA2 keys for team SSIDs</li>
+                        <li>Document all network credentials</li>
+                        <li>Limit administrative access</li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>📊 Performance Optimization</h4>
+                    <ul>
+                        <li>Set WiFi channels to avoid interference</li>
+                        <li>Configure QoS for FMS traffic priority</li>
+                        <li>Monitor bandwidth usage during events</li>
+                        <li>Have spare equipment ready for swaps</li>
+                        <li>Document working configurations</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section id="troubleshooting" class="section">
+            <h2>🔧 Troubleshooting: When Things Go Wrong</h2>
+            
+            <p>In three years of running FMS across Minnesota, I've seen every possible failure mode. Here's your survival guide for when (not if) things break.</p>
+
+            <div class="warning-box">
+                <h4>🚨 The "Oh Crap" Moment Survival Kit</h4>
+                <p>"Nothing teaches troubleshooting like a gymnasium full of anxious teams staring at you while the FMS is down. Stay calm, think systematically, and remember - every problem has a solution." - Pranavagurubaran</p>
+            </div>
+
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h4>🔴 Driver Station Won't Connect</h4>
+                    <p><strong>Symptoms:</strong> Red light, no communication</p>
+                    <p><strong>Solution Steps:</strong></p>
+                    <ol>
+                        <li>Verify cable connection (physical layer)</li>
+                        <li>Check driver station IP (should be DHCP)</li>
+                        <li>Ping 10.0.100.5 from driver station</li>
+                        <li>Restart driver station software</li>
+                        <li>Check switch port LED indicators</li>
+                    </ol>
+                </div>
+                <div class="grid-item">
+                    <h4>📡 Robot WiFi Issues</h4>
+                    <p><strong>Symptoms:</strong> Robot won't connect to field</p>
+                    <p><strong>Solution Steps:</strong></p>
+                    <ol>
+                        <li>Verify robot radio configuration</li>
+                        <li>Check team SSID/password in FMS</li>
+                        <li>Test robot code network settings</li>
+                        <li>Reconfigure with FRC Radio Tool</li>
+                        <li>Check for WiFi interference</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🎯 The Minnesota Troubleshooting Philosophy</h3>
+                <p><strong>Layer by Layer:</strong> Start with physical connections, then network layer, then application layer. <strong>Document Everything:</strong> What failed, when, and how you fixed it. <strong>Stay Calm:</strong> Panic is contagious, but so is confidence.</p>
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section id="resources" class="section alt">
+            <h2>📚 Resources & Support: Your Minnesota FMS Community</h2>
+            
+            <p>The Minnesota robotics community is legendary for collaboration and mutual support. Here's your network of resources for FMS success.</p>
+
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h4>🌐 Online Resources</h4>
+                    <ul>
+                        <li><a href="#" class="btn">Chief Delphi Forums</a></li>
+                        <li><a href="#" class="btn">GitHub: cpapplefamily/cheesy-arena</a></li>
+                        <li><a href="#" class="btn">FIRST in Minnesota</a></li>
+                        <li><a href="#" class="btn">FMS Documentation Portal</a></li>
+                    </ul>
+                </div>
+                <div class="grid-item">
+                    <h4>🤝 Minnesota Support Network</h4>
+                    <ul>
+                        <li><a href="#" class="btn btn-success">RAYSE MN Mentors</a></li>
+                        <li><a href="#" class="btn btn-success">Twin Cities FRC Alliance</a></li>
+                        <li><a href="#" class="btn btn-success">Rochester Area Teams</a></li>
+                        <li><a href="#" class="btn btn-success">Duluth Robotics Collective</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>📞 Emergency Support Contacts</h4>
+                <p><strong>Pranavagurubaran Senthilkumar:</strong> Available for critical FMS support during Minnesota events<br>
+                <strong>Minnesota FTA Network:</strong> Your regional Field Technical Advisors<br>
+                <strong>Chief Delphi Emergency:</strong> 24/7 community support for urgent issues</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🎓 Next Steps: Becoming an FMS Expert</h3>
+                <p>Ready to take your FMS skills to the next level? Consider hosting a practice event, volunteering as an FTA at regionals, or mentoring other teams through their first FMS deployment. The Minnesota robotics community grows stronger when we all level up together.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p><strong>🤖 RAYSE MN FMS Guide</strong> • Written by Pranavagurubaran Senthilkumar • Byron, Minnesota 2025</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Empowering Minnesota robotics teams with professional-grade technical knowledge</p>
+        </footer>
