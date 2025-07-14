@@ -1,0 +1,394 @@
+# FRC FMS: From Zero to Arena
+## The Ultimate Field Management System Guide for FIRST Robotics Competition
+
+**Author:** Guru (Pranavagurubaran S)  
+**Mentors:** Andy Gasser (#7028) & Corey Applegate (#4607)  
+**Version:** 2025 Season - Draft  
+**Last Updated:** [Date]
+
+---
+
+## 📋 Table of Contents
+
+1. [Introduction](#introduction)
+2. [System Architecture](#system-architecture)
+3. [Software Options](#software-options)
+4. [Hardware Requirements](#hardware-requirements)
+5. [Step-by-Step Setup](#step-by-step-setup)
+6. [Network Configuration](#network-configuration)
+7. [Troubleshooting](#troubleshooting)
+8. [Resources & Support](#resources-support)
+9. [Contributing](#contributing)
+
+---
+
+## 🚀 Introduction {#introduction}
+
+### Why This Guide Matters for Minnesota Robotics
+
+> **From the Author - Guru**  
+> "As a First Robo member & mentor in Minnesota, I've seen challenges with FMS setup during offseason and crucial Week 0 events. This guide bridges the gap between theory and practice, giving you the confidence to deploy professional-grade field management systems to prepare for SEASON."
+
+The Field Management System (FMS) is the technological backbone of every FIRST Robotics Competition event. For teams across Minnesota - especially in SE MN at Byron - mastering FMS setup is your gateway to hosting successful scrimmages, Week 0 events, and off-season competitions.
+
+### 🎯 What You'll Learn
+
+#### Technical Skills
+- Professional network architecture design
+- Pro-grade hardware configuration
+- Software deployment and optimization
+- Advanced troubleshooting methodologies
+- Minnesota-specific venue considerations
+
+#### Leadership & Team Benefits
+- Real-world IT experience for students
+- Leadership development through tech challenges
+- Collaborative problem-solving culture
+- Preparation for STEM careers
+- Building resilient team networks
+
+---
+
+## 🏗️ System Architecture {#system-architecture}
+
+### Overview
+Every successful FRC event starts with solid architecture. Understanding this architecture isn't optional - it's essential.
+
+### Network Topology
+
+```
+                    [FMS Server]
+                    10.0.100.5
+                        |
+                  [Field Router]
+                    10.0.100.1
+                    /        \
+          [Red Switch]        [Blue Switch]
+               |                    |
+        [DS1] [DS2] [DS3]    [DS1] [DS2] [DS3]
+```
+
+### Key Components
+
+| Component | IP Address | Function |
+|-----------|------------|----------|
+| FMS Server | 10.0.100.5 | Main control system |
+| Field Router | 10.0.100.1 | Network gateway |
+| DHCP Range | 10.0.100.20-199 | Dynamic IP allocation |
+| Red Alliance | VLAN 10 | Isolated network |
+| Blue Alliance | VLAN 20 | Isolated network |
+
+### ⚡ Critical Notes
+- The 10.0.100.5 IP is **hardcoded** in Driver Station software
+- Each alliance must be on isolated VLANs for security
+- WiFi SSIDs follow format: `[TeamNumber]_Robot`
+
+---
+
+## 💻 Software Options {#software-options}
+
+### Comparison Matrix
+
+| Feature | FMS Freezy Arena | Official FMS | Cheesy Arena |
+|---------|------------------|--------------|--------------|
+| **A-Stop Support** | ✅ Yes | ❌ No | ❌ No |
+| **2025 Theme** | ✅ REEFSCAPE | ✅ Generic | ❌ No |
+| **Week 0 Features** | ✅ Enhanced | ⚠️ Basic | ❌ None |
+| **Community Support** | 🟨 Growing | ✅ Official | ✅ Large |
+| **Open Source** | ✅ Yes | ❌ No | ✅ Yes |
+| **Minnesota Tested** | ✅ Proven | ✅ Yes | ✅ Yes |
+
+### 🏆 Recommendations by Use Case
+
+1. **Week 0 Events:** FMS Freezy Arena
+2. **Official Events:** Official FMS Off-Season
+3. **Practice/Scrimmages:** Standard Cheesy Arena
+4. **Learning:** Try all three!
+
+### Installation Links
+- **Freezy Arena:** `github.com/cpapplefamily/cheesy-arena`
+- **Official FMS:** Contact FIRST for access
+- **Cheesy Arena:** `github.com/Team254/cheesy-arena`
+
+---
+
+## 🛠️ Hardware Requirements {#hardware-requirements}
+
+### Minnesota-Tested Equipment List
+
+| Component | Minimum Spec | Recommended | Budget | Notes |
+|-----------|--------------|-------------|---------|-------|
+| **FMS Computer** | 8GB RAM, i5, SSD | 16GB RAM, i7, NVMe | $800-1500 | Lenovo ThinkPad preferred |
+| **Field Router** | AC1750, VLAN support | WiFi 6, managed | $100-300 | ASUS AX6000 tested |
+| **Alliance Switches** | 8-port unmanaged | 8-port managed, PoE | $150-400 ea | Netgear GS308P proven |
+| **Cabling** | CAT5e, indoor | CAT6, outdoor-rated | $200-500 | Monoprice recommended |
+| **UPS** | 550VA | 1500VA | $100-300 | APC recommended |
+
+### ❄️ Minnesota-Specific Considerations
+
+**Cold Weather Impact:**
+- Standard electronics fail below 32°F
+- Always warm equipment before events
+- Have backup hardware ready
+- Test in actual venue conditions
+
+**Venue Challenges:**
+- School networks often block 10.0.100.x
+- Coordinate with IT 48+ hours ahead
+- Heated gyms cause WiFi interference
+- Test range thoroughly
+
+---
+
+## 🎯 Step-by-Step Setup {#step-by-step-setup}
+
+### Pre-Event Checklist
+- [ ] Download and test FMS software
+- [ ] Configure all network hardware
+- [ ] Label all cables clearly
+- [ ] Create IP address documentation
+- [ ] Test with practice robot
+
+### Setup Timeline (2 hours total)
+
+#### Hour 1: Infrastructure
+1. **Download Software (15 min)**
+   - Get latest Freezy Arena from GitHub
+   - Extract to dedicated folder
+   - Verify all files present
+
+2. **Configure Router (20 min)**
+   ```
+   IP: 10.0.100.1
+   Subnet: 255.255.255.0
+   DHCP: 10.0.100.20-199
+   Lease: 2 hours
+   ```
+
+3. **Position Hardware (15 min)**
+   - Router at scoring table
+   - Switches under middle DS positions
+   - Run CAT6 cables (50-75ft)
+
+4. **Connect Components (10 min)**
+   - Switches to router
+   - FMS computer to router
+   - Power everything on
+
+#### Hour 2: Configuration
+5. **Set FMS Computer IP (10 min)**
+   ```
+   IP: 10.0.100.5 (STATIC)
+   Subnet: 255.255.255.0
+   Gateway: 10.0.100.1
+   DNS: 8.8.8.8, 8.8.4.4
+   ```
+
+6. **Launch FMS Software (20 min)**
+   - Start Freezy Arena
+   - Access at `10.0.100.5:8080`
+   - Create event
+   - Add teams
+
+7. **Test All Stations (20 min)**
+   - Connect DS laptops
+   - Verify all show green
+   - Test e-stop functions
+
+8. **Final Validation (10 min)**
+   - Run practice match
+   - Test scoring
+   - Verify displays
+
+### 🔥 Byron Standard Validation
+- [ ] FMS responds at 10.0.100.5:8080
+- [ ] All 6 driver stations connect
+- [ ] Test robot connects to WiFi
+- [ ] Emergency stops work
+- [ ] Scoring displays update
+- [ ] Match timing cycles properly
+
+---
+
+## ⚙️ Network Configuration {#network-configuration}
+
+### Router Configuration
+```bash
+# Basic Settings
+LAN IP: 10.0.100.1
+Subnet: 255.255.255.0
+DHCP Start: 10.0.100.20
+DHCP End: 10.0.100.199
+Lease Time: 2 hours
+
+# WiFi Settings
+SSID Format: [TeamNumber]_Robot
+Security: WPA2-PSK
+Channel: Auto (or 1, 6, 11)
+```
+
+### FMS Computer Network
+```bash
+# Windows Network Settings
+IP Address: 10.0.100.5
+Subnet Mask: 255.255.255.0
+Default Gateway: 10.0.100.1
+Primary DNS: 8.8.8.8
+Secondary DNS: 8.8.4.4
+```
+
+### Security Best Practices
+1. Change ALL default passwords
+2. Disable WPS on WiFi
+3. Use strong WPA2 keys (12+ characters)
+4. Document credentials securely
+5. Limit admin access
+
+### Performance Optimization
+- Set WiFi channels to avoid interference
+- Configure QoS for FMS traffic priority
+- Monitor bandwidth during events
+- Keep spare equipment ready
+
+---
+
+## 🔧 Troubleshooting {#troubleshooting}
+
+### Common Issues & Solutions
+
+#### 🔴 Driver Station Won't Connect
+
+**Symptoms:** Red communication light, no robot data
+
+**Solution Steps:**
+1. Check physical cable connection
+2. Verify DS is set to DHCP
+3. Open command prompt, run: `ping 10.0.100.5`
+4. If ping fails, check switch connection
+5. Restart Driver Station software
+6. Check switch port LED status
+
+#### 📡 Robot Won't Connect to Field
+
+**Symptoms:** No robot communications, WiFi issues
+
+**Solution Steps:**
+1. Verify robot radio configured for event
+2. Check team number in FMS matches radio
+3. Confirm SSID/password in FMS admin
+4. Use FRC Radio Configuration Tool
+5. Check for WiFi interference (use WiFi analyzer)
+6. Try different WiFi channel
+
+#### ⚠️ FMS Software Crashes
+
+**Symptoms:** Web interface unresponsive, matches won't start
+
+**Solution Steps:**
+1. Check FMS computer resources (CPU/RAM)
+2. Restart FMS software
+3. Clear browser cache
+4. Check Windows Firewall settings
+5. Verify no IP conflicts
+6. Review FMS logs for errors
+
+### Emergency Procedures
+
+**Complete System Failure:**
+1. Switch to backup FMS computer
+2. Use paper match schedules
+3. Manual scoring if needed
+4. Communicate with all teams
+5. Document everything
+
+**Partial Failures:**
+- Single DS down: Move team to spare station
+- WiFi issues: Switch to backup router
+- Display problems: Use PA announcements
+
+---
+
+## 📚 Resources & Support {#resources-support}
+
+### Online Resources
+- [Chief Delphi FMS Forum](https://www.chiefdelphi.com/tag/fms)
+- [FMS Freezy Arena GitHub](https://github.com/cpapplefamily/cheesy-arena)
+- [Official FRC FMS Documentation](https://frc-docs.readthedocs.io/)
+- [FRC Discord #fms-help](https://discord.gg/frc)
+
+### Minnesota Support Network
+- **RAYSE MN Mentors** - Local expertise
+- **Twin Cities FRC Alliance** - Regional support
+- **Rochester Area Teams** - SE Minnesota help
+- **Duluth Robotics Collective** - Northern support
+
+### Emergency Contacts
+- **Author:** Pranavagurubaran S (Guru)
+- **Minnesota FTA Network:** Contact through FIRST
+- **Chief Delphi Emergency:** 24/7 community support
+
+### Training Opportunities
+1. Host practice events
+2. Shadow experienced FTAs
+3. Attend FMS workshops
+4. Join online training sessions
+
+---
+
+## 🤝 Contributing {#contributing}
+
+### How to Contribute
+1. **Fork** this repository
+2. **Create** a feature branch
+3. **Commit** your changes
+4. **Push** to your branch
+5. **Submit** a pull request
+
+### Contribution Guidelines
+- Keep language clear and concise
+- Add Minnesota-specific examples
+- Test all procedures before documenting
+- Include troubleshooting for new features
+- Update table of contents
+
+### Areas Needing Contributions
+- [ ] Video tutorials
+- [ ] More troubleshooting scenarios
+- [ ] Venue-specific guides
+- [ ] Translation to other languages
+- [ ] Advanced networking topics
+
+### Recognition
+All contributors will be credited in the guide. Major contributors will be listed as co-authors.
+
+---
+
+## 📝 Version History
+
+| Version | Date | Changes | Author |
+|---------|------|---------|--------|
+| 1.0 | Jan 2025 | Initial release | Guru |
+| 1.1 | TBD | Community updates | TBD |
+
+---
+
+## 📄 License
+
+This guide is released under Creative Commons CC BY-SA 4.0. You are free to share and adapt this material with attribution.
+
+---
+
+## 🙏 Acknowledgments
+
+Special thanks to:
+- Andy Gasser (#7028) & Corey Applegate (#4607) for mentorship
+- Byron MN robotics community
+- Minnesota FIRST teams
+- Chief Delphi community
+- All who contribute to making FIRST accessible
+
+---
+
+*"Empowering Minnesota robotics teams with professional-grade technical knowledge"*
+
+**Questions? Suggestions?** Open an issue on GitHub or contact the author directly.
