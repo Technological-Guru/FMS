@@ -1,385 +1,233 @@
-# FRC FMS: From Zero to Arena
-## The Ultimate Field Management System Guide for FIRST Robotics Competition
+# FMS Freesy Arena Setup Guide
 
-**Author:** Guru (Pranavagurubaran S)  
-**Mentors:** Andy Gasser (#7028) & Corey Applegate (#4607) from CD Posts
-**Version:** 2025 Season - Draft  
-**Last Updated:** [Date]
+> **For Minnesota Week 0 Events and Beyond**  
+> Curated: Pranavagurubaran Senthilkumar (RAYSE MN)  
+> Based on cpapplefamily's enhanced fork of Cheesy Arena Mentor : Andy Gasser
 
----
-
-## 📋 Table of Contents
-
-1. [Introduction](#introduction)
-2. [System Architecture](#system-architecture)
-3. [Software Options](#software-options)
-4. [Hardware Requirements](#hardware-requirements)
-5. [Step-by-Step Setup](#step-by-step-setup)
-6. [Network Configuration](#network-configuration)
-7. [Troubleshooting](#troubleshooting)
-8. [Resources & Support](#resources-support)
-9. [Contributing](#contributing)
 
 ---
 
-## 🚀 Introduction {#introduction}
+## 🎯 Quick Start
 
-### Why This Guide Matters for Minnesota Robotics
+**FMS Freesy Arena** is cpapplefamily's enhanced fork of Team 254's Cheesy Arena, specifically designed for Week 0 FRC events with A-stop functionality and 2025 REEFSCAPE theming.
 
-> **From the Author - Guru**  
-> "As a First Robo member & mentor in Minnesota, I've seen challenges with FMS setup during offseason and crucial Week 0 events. This guide bridges the gap between theory and practice, giving you the confidence to deploy professional-grade field management systems to prepare for SEASON."
-
-The Field Management System (FMS) is the technological backbone of every FIRST Robotics Competition event. For teams across Minnesota - especially in SE MN at Byron - mastering FMS setup is your gateway to hosting successful scrimmages, Week 0 events, and off-season competitions.
-
-### 🎯 What You'll Learn
-
-#### Technical Skills
-- Professional network architecture design
-- Pro-grade hardware configuration
-- Software deployment and optimization
-- Advanced troubleshooting methodologies
-- Minnesota-specific venue considerations
-
-#### Leadership & Team Benefits
-- Real-world IT experience for students
-- Leadership development through tech challenges
-- Collaborative problem-solving culture
-- Preparation for STEM careers
-- Building resilient team networks
+### Latest Version
+- **Freezy Arena v0.2_2025_Freezy** (Recommended)
+- **Download:** [GitHub Releases](https://github.com/cpapplefamily/freesy-arena/releases)
+- **Platforms:** Windows, macOS (x64/M1), Linux
 
 ---
 
-## 🏗️ System Architecture {#system-architecture}
+## 🛠️ Hardware Requirements
 
-### Overview
-Every successful FRC event starts with solid architecture. Understanding this architecture isn't optional - it's essential.
+### FMS Computer
+- **OS:** Windows 10+, macOS 10.15+, or Ubuntu 18.04+
+- **RAM:** 8GB minimum, 16GB recommended
+- **Storage:** 10GB free space (SSD preferred)
+- **Network:** Gigabit Ethernet port (required)
+- **IP Address:** Must be set to `10.0.100.5` (static)
 
-### Network Topology
+### Network Equipment
+- **Router:** Gigabit ports, WiFi capability, VLAN support preferred
+- **Switches:** 2x managed switches (8+ ports each)
+- **Cables:** CAT6 Ethernet cables (15-20ft for driver stations, 50-75ft for field runs)
+- **Driver Stations:** 6x team laptops running FRC Driver Station software
 
+---
+
+## 🔧 Network Configuration
+
+### Critical IP Settings
 ```
-                    [FMS Server]
-                    10.0.100.5
-                        |
-                  [Field Router]
-                    10.0.100.1
-                    /        \
-          [Red Switch]        [Blue Switch]
-               |                    |
-        [DS1] [DS2] [DS3]    [DS1] [DS2] [DS3]
+Router:           10.0.100.1
+FMS Computer:     10.0.100.5 (STATIC - Never DHCP!)
+DHCP Range:       10.0.100.20 - 10.0.100.199
+Subnet Mask:      255.255.255.0
 ```
 
-### Key Components
+### Router Setup
+1. Set LAN IP to `10.0.100.1`
+2. Enable DHCP with range `10.0.100.20-199`
+3. Configure WiFi SSIDs for team robots: `[TeamNumber]_Robot`
+4. Set strong WPA2 passwords for each team
 
-| Component | IP Address | Function |
-|-----------|------------|----------|
-| FMS Server | 10.0.100.5 | Main control system |
-| Field Router | 10.0.100.1 | Network gateway |
-| DHCP Range | 10.0.100.20-199 | Dynamic IP allocation |
-| Red Alliance | VLAN 10 | Isolated network |
-| Blue Alliance | VLAN 20 | Isolated network |
-
-### ⚡ Critical Notes
-- The 10.0.100.5 IP is **hardcoded** in Driver Station software
-- Each alliance must be on isolated VLANs for security
-- WiFi SSIDs follow format: `[TeamNumber]_Robot`
+### FMS Computer Setup
+1. Set static IP to `10.0.100.5`
+2. Subnet mask: `255.255.255.0`
+3. Gateway: `10.0.100.1`
+4. DNS: `8.8.8.8` and `8.8.4.4`
 
 ---
 
-## 💻 Software Options {#software-options}
+## 📦 Installation Steps
 
-### Comparison Matrix
+### 1. Download and Extract
+```bash
+# Download from GitHub releases page
+# Extract to dedicated folder
+mkdir FreesyArena
+cd FreesyArena
+# Extract downloaded file here
+```
 
-| Feature | FMS Freezy Arena | Official FMS | Cheesy Arena |
-|---------|------------------|--------------|--------------|
-| **A-Stop Support** | ✅ Yes | ❌ No | ❌ No |
-| **2025 Theme** | ✅ REEFSCAPE | ✅ Generic | ❌ No |
-| **Week 0 Features** | ✅ Enhanced | ⚠️ Basic | ❌ None |
-| **Community Support** | 🟨 Growing | ✅ Official | ✅ Large |
-| **Open Source** | ✅ Yes | ❌ No | ✅ Yes |
-| **Minnesota Tested** | ✅ Proven | ✅ Yes | ✅ Yes |
+### 2. Network Setup
+- Configure router with IP settings above
+- Set FMS computer to static IP `10.0.100.5`
+- Connect router to FMS computer via Ethernet
 
-### 🏆 Recommendations by Use Case
+### 3. Field Layout
+```
+[Red DS1] [Red DS2] [Red DS3]    FIELD    [Blue DS1] [Blue DS2] [Blue DS3]
+     |        |        |                       |        |        |
+     └────[Red Switch]─┘                       └───[Blue Switch]──┘
+              |                                          |
+              └─────────────[Router]──────────────────────┘
+                              |
+                        [FMS Computer]
+                        (10.0.100.5)
+```
 
-1. **Week 0 Events:** FMS Freezy Arena
-2. **Official Events:** Official FMS Off-Season
-3. **Practice/Scrimmages:** Standard Cheesy Arena
-4. **Learning:** Try all three!
+### 4. Connect Driver Stations
+- Connect each driver station to appropriate alliance switch
+- Set all driver stations to DHCP (automatic IP)
+- Red alliance typically on scorekeeper's right
 
-### Installation Links
-- **Freezy Arena:** `github.com/cpapplefamily/cheesy-arena`
-- **Official FMS:** Contact FIRST for access
-- **Cheesy Arena:** `github.com/Team254/cheesy-arena`
+### 5. Launch Freesy Arena
+```bash
+# Execute the downloaded application
+./freesy-arena         # Linux/macOS
+freesy-arena.exe       # Windows
+```
 
----
-
-## 🛠️ Hardware Requirements {#hardware-requirements}
-
-### Minnesota-Tested Equipment List
-
-| Component | Minimum Spec | Recommended | Budget | Notes |
-|-----------|--------------|-------------|---------|-------|
-| **FMS Computer** | 8GB RAM, i5, SSD | 16GB RAM, i7, NVMe | $800-1500 | Lenovo ThinkPad preferred |
-| **Field Router** | AC1750, VLAN support | WiFi 6, managed | $100-300 | ASUS AX6000 tested |
-| **Alliance Switches** | 8-port unmanaged | 8-port managed, PoE | $150-400 ea | Netgear GS308P proven |
-| **Cabling** | CAT5e, indoor | CAT6, outdoor-rated | $200-500 | Monoprice recommended |
-| **UPS** | 550VA | 1500VA | $100-300 | APC recommended |
-
-### ❄️ Minnesota-Specific Considerations
-
-**Cold Weather Impact:**
-- Standard electronics fail below 32°F
-- Always warm equipment before events
-- Have backup hardware ready
-- Test in actual venue conditions
-
-**Venue Challenges:**
-- School networks often block 10.0.100.x
-- Coordinate with IT 48+ hours ahead
-- Heated gyms cause WiFi interference
-- Test range thoroughly
+### 6. Access Web Interface
+- Open browser to `http://10.0.100.5:8080`
+- Configure event settings
+- Add teams and create match schedule
+- Test A-stop functionality
 
 ---
 
-## 🎯 Step-by-Step Setup {#step-by-step-setup}
+## ⚡ Key Features
 
-### Pre-Event Checklist
-- [ ] Download and test FMS software
-- [ ] Configure all network hardware
-- [ ] Label all cables clearly
-- [ ] Create IP address documentation
-- [ ] Test with practice robot
+### A-Stop Emergency System
+- Enhanced safety beyond standard Cheesy Arena
+- Field-wide robot emergency stop
+- Critical for Week 0 testing environments
 
-### Setup Timeline (2 hours total)
+### 2025 REEFSCAPE Theming
+- Game-specific visual design
+- Professional competition appearance
+- Immersive event experience
 
-#### Hour 1: Infrastructure
-1. **Download Software (15 min)**
-   - Get latest Freezy Arena from GitHub
-   - Extract to dedicated folder
-   - Verify all files present
+### Enhanced Week 0 Tools
+- Improved match scheduling
+- Better team management
+- Enhanced diagnostics
+- Streamlined setup process
 
-2. **Configure Router (20 min)**
-   ```
-   IP: 10.0.100.1
-   Subnet: 255.255.255.0
-   DHCP: 10.0.100.20-199
-   Lease: 2 hours
-   ```
+---
 
-3. **Position Hardware (15 min)**
-   - Router at scoring table
-   - Switches under middle DS positions
-   - Run CAT6 cables (50-75ft)
+## 🚨 Troubleshooting
 
-4. **Connect Components (10 min)**
-   - Switches to router
-   - FMS computer to router
-   - Power everything on
+### Driver Station Won't Connect
+1. Check cable connections
+2. Verify driver station is set to DHCP
+3. Ping `10.0.100.5` from driver station
+4. Restart driver station software
+5. Check switch port LEDs
 
-#### Hour 2: Configuration
-5. **Set FMS Computer IP (10 min)**
-   ```
-   IP: 10.0.100.5 (STATIC)
-   Subnet: 255.255.255.0
-   Gateway: 10.0.100.1
-   DNS: 8.8.8.8, 8.8.4.4
-   ```
+### Robot Radio Issues
+1. Verify robot radio configuration
+2. Check team SSID/password in Freesy Arena
+3. Use FRC Radio Configuration Utility
+4. Check for WiFi interference
+5. Verify robot code network settings
 
-6. **Launch FMS Software (20 min)**
-   - Start Freezy Arena
-   - Access at `10.0.100.5:8080`
-   - Create event
-   - Add teams
+### A-Stop Not Working
+1. Check A-stop configuration in settings
+2. Verify hardware connections
+3. Test software emergency stop button
+4. Review Freesy Arena error logs
+5. Contact cpapplefamily for support
 
-7. **Test All Stations (20 min)**
-   - Connect DS laptops
-   - Verify all show green
-   - Test e-stop functions
+### Web Interface Problems
+1. Verify browser is pointing to `http://10.0.100.5:8080`
+2. Check firewall settings on FMS computer
+3. Try different browser (Chrome/Firefox recommended)
+4. Restart Freesy Arena application
 
-8. **Final Validation (10 min)**
-   - Run practice match
-   - Test scoring
-   - Verify displays
+---
 
-### 🔥 Byron Standard Validation
-- [ ] FMS responds at 10.0.100.5:8080
-- [ ] All 6 driver stations connect
-- [ ] Test robot connects to WiFi
-- [ ] Emergency stops work
-- [ ] Scoring displays update
+## 📋 Pre-Event Checklist
+
+- [ ] FMS computer responds at `10.0.100.5:8080`
+- [ ] All 6 driver stations connect and show green status
+- [ ] Test robot can connect to WiFi SSID
+- [ ] A-stop emergency functionality works
+- [ ] Real-time scoring displays correctly
 - [ ] Match timing cycles properly
+- [ ] Audience displays receive data
+- [ ] All network cables are secure
+- [ ] Backup equipment is available
+- [ ] Team SSIDs and passwords are documented
 
 ---
 
-## ⚙️ Network Configuration {#network-configuration}
+## 📞 Support Resources
 
-### Router Configuration
-```bash
-# Basic Settings
-LAN IP: 10.0.100.1
-Subnet: 255.255.255.0
-DHCP Start: 10.0.100.20
-DHCP End: 10.0.100.199
-Lease Time: 2 hours
+### Primary Resources
+- **GitHub Repository:** [cpapplefamily/freesy-arena](https://github.com/cpapplefamily/freesy-arena)
+- **Chief Delphi Forum:** Search "FMS Freezy Arena"
+- **Developer:** cpapplefamily (Team 3244 Lead Mentor)
 
-# WiFi Settings
-SSID Format: [TeamNumber]_Robot
-Security: WPA2-PSK
-Channel: Auto (or 1, 6, 11)
-```
+### Minnesota FRC Community
+- **FIRST in Minnesota:** [firstinminnesota.org](https://firstinminnesota.org)
+- **Chief Delphi:** [chiefdelphi.com](https://chiefdelphi.com)
+- **Regional FTA Network:** Contact your assigned Field Technical Advisor
 
-### FMS Computer Network
-```bash
-# Windows Network Settings
-IP Address: 10.0.100.5
-Subnet Mask: 255.255.255.0
-Default Gateway: 10.0.100.1
-Primary DNS: 8.8.8.8
-Secondary DNS: 8.8.4.4
-```
-
-### Security Best Practices
-1. Change ALL default passwords
-2. Disable WPS on WiFi
-3. Use strong WPA2 keys (12+ characters)
-4. Document credentials securely
-5. Limit admin access
-
-### Performance Optimization
-- Set WiFi channels to avoid interference
-- Configure QoS for FMS traffic priority
-- Monitor bandwidth during events
-- Keep spare equipment ready
+### Emergency Contacts
+- **Critical Issues:** Post on Chief Delphi with "Freesy Arena" tag
+- **Minnesota Events:** Contact RAYSE MN mentor network
+- **Hardware Failures:** Have backup equipment ready
 
 ---
 
-## 🔧 Troubleshooting {#troubleshooting}
+## 🤝 Contributing to This Guide
 
-### Common Issues & Solutions
+This guide is designed for community collaboration. To contribute:
 
-#### 🔴 Driver Station Won't Connect
+1. **Fork this document** and make improvements
+2. **Test procedures** at your own events
+3. **Share experiences** on Chief Delphi forums
+4. **Submit updates** based on new Freesy Arena versions
+5. **Document issues** and solutions you discover
 
-**Symptoms:** Red communication light, no robot data
-
-**Solution Steps:**
-1. Check physical cable connection
-2. Verify DS is set to DHCP
-3. Open command prompt, run: `ping 10.0.100.5`
-4. If ping fails, check switch connection
-5. Restart Driver Station software
-6. Check switch port LED status
-
-#### 📡 Robot Won't Connect to Field
-
-**Symptoms:** No robot communications, WiFi issues
-
-**Solution Steps:**
-1. Verify robot radio configured for event
-2. Check team number in FMS matches radio
-3. Confirm SSID/password in FMS admin
-4. Use FRC Radio Configuration Tool
-5. Check for WiFi interference (use WiFi analyzer)
-6. Try different WiFi channel
-
-#### ⚠️ FMS Software Crashes
-
-**Symptoms:** Web interface unresponsive, matches won't start
-
-**Solution Steps:**
-1. Check FMS computer resources (CPU/RAM)
-2. Restart FMS software
-3. Clear browser cache
-4. Check Windows Firewall settings
-5. Verify no IP conflicts
-6. Review FMS logs for errors
-
-### Emergency Procedures
-
-**Complete System Failure:**
-1. Switch to backup FMS computer
-2. Use paper match schedules
-3. Manual scoring if needed
-4. Communicate with all teams
-5. Document everything
-
-**Partial Failures:**
-- Single DS down: Move team to spare station
-- WiFi issues: Switch to backup router
-- Display problems: Use PA announcements
-
----
-
-## 📚 Resources & Support {#resources-support}
-
-### Online Resources
-- [Chief Delphi FMS Forum](https://www.chiefdelphi.com/tag/fms)
-- [FMS Freezy Arena GitHub](https://github.com/cpapplefamily/cheesy-arena)
-- [Official FRC FMS Documentation](https://frc-docs.readthedocs.io/)
-- [FRC Discord #fms-help](https://discord.gg/frc)
-
-### Contacts
-- **Author:** Pranavagurubaran S (Guru)
-### Training Opportunities
-1. Host practice events
-2. Shadow experienced FTAs
-3. Attend FMS workshops
-4. Join online training sessions
-
----
-
-## 🤝 Contributing {#contributing}
-
-### How to Contribute
-1. **Fork** this repository
-2. **Create** a feature branch
-3. **Commit** your changes
-4. **Push** to your branch
-5. **Submit** a pull request
-
-### Contribution Guidelines
-- Keep language clear and concise
-- Add Minnesota-specific examples
-- Test all procedures before documenting
-- Include troubleshooting for new features
-- Update table of contents
-
-### Areas Needing Contributions
-- [ ] Video tutorials
-- [ ] More troubleshooting scenarios
-- [ ] Venue-specific guides
-- [ ] Translation to other languages
-- [ ] Advanced networking topics
-
-### Recognition
-All contributors will be credited in the guide. Major contributors will be listed as co-authors.
+### Areas Needing Updates
+- [ ] New version release procedures
+- [ ] Additional troubleshooting scenarios
+- [ ] Minnesota-specific venue configurations
+- [ ] Integration with other FRC software tools
+- [ ] Performance optimization tips
 
 ---
 
 ## 📝 Version History
 
-| Version | Date | Changes | Author |
-|---------|------|---------|--------|
-| 1.0 | Jan 2025 | Initial release | Guru |
-| 1.1 | TBD | Community updates | TBD |
+| Version | Date | Author | Changes |
+|---------|------|---------|---------|
+| 1.0 | 2025-01-14 | Pranavagurubaran | Initial guide creation |
+| | | | Focus on Freesy Arena v0.2_2025_Freezy |
+| | | | Byron MN deployment experience |
 
 ---
 
-## 📄 License
+## 📄 License & Credits
 
-This guide is released under Creative Commons CC BY-SA 4.0. You are free to share and adapt this material with attribution.
-
----
-
-## 🙏 Acknowledgments
-
-Special thanks to:
-- Andy Gasser (#7028) & Corey Applegate (#4607) for CD posts and mentorship
-- Byron MN robotics community
-- Minnesota FIRST teams
-- Chief Delphi community
-- All who contribute to making FIRST accessible
+- **Freesy Arena:** Modified fork by cpapplefamily from Team 254's Cheesy Arena
+- **Original Cheesy Arena:** Team 254 (The Cheesy Poofs)
+- **This Guide:** RAYSE MN / Pranavagurubaran Senthilkumar
+- **License:** Open for community use and modification
 
 ---
 
-*"Empowering Minnesota robotics teams with professional-grade technical knowledge"*
-
-**Questions? Suggestions?** Open an issue on GitHub or contact the author directly.
+*Last Updated: January 2025 for 2025 FRC Season REEFSCAPE*
